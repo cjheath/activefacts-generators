@@ -81,7 +81,7 @@ module ActiveFacts
           if fact_type.all_role.size == 1
             return name_builder.call(
 	      role_name ?
-		role_name.snakewords :
+		role_name.words.snakewords :
 		reading.text.gsub(/ *\{0\} */,' ').gsub(/[- ]+/,'_').words
 	    )
           end
