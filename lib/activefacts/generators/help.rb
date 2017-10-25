@@ -14,22 +14,22 @@ module ActiveFacts
     class HELP
     private
       def initialize(vocabulary, *options)
-	generators = $:.
-	  map{|path|
+        generators = $:.
+          map{|path|
             Dir[path+"/activefacts/generators/**/*.rb"].
-	      reject{|p|
-		p =~ %r{/(transform|helpers)/}
-	      }.
-	      map{|p|
+              reject{|p|
+                p =~ %r{/(transform|helpers)/}
+              }.
+              map{|p|
                 p.sub(%r{.*/activefacts/generators/}, '').sub(/\.rb/,'')
               }
           }
-	transformers = $:.
-	  map{|path|
+        transformers = $:.
+          map{|path|
             Dir[path+"/activefacts/generators/transform/**/*.rb"].
-	      map{|p|
+              map{|p|
                 p.sub(%r{.*/activefacts/generators/}, '').sub(/\.rb/,'')
-	      }
+              }
           }
 
         puts %Q{

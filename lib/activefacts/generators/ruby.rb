@@ -45,7 +45,7 @@ module ActiveFacts
       end
 
       def emit_mapping o
-	return
+        return
         case @mapping
         when 'sql'
           puts "    table"
@@ -55,11 +55,11 @@ module ActiveFacts
       end
 
       def data_type_dump(o)
-	value_type_dump(o, o.name, {}) if o.all_role.size > 0
+        value_type_dump(o, o.name, {}) if o.all_role.size > 0
       end
 
       def value_type_dump(o, super_type_name, facets)
-	puts o.ruby_definition
+        puts o.ruby_definition
       end
 
       def subtype_dump(o, supertypes, pi = nil)
@@ -124,7 +124,7 @@ module ActiveFacts
       end
 
       def binary_dump(role, role_name, role_player, mandatory = nil, one_to_one = nil, readings = nil, counterpart_role_name = nil, counterpart_method_name = nil)
-	puts role.as_binary(role_name, role_player, mandatory, one_to_one, readings, counterpart_role_name, counterpart_method_name)
+        puts role.as_binary(role_name, role_player, mandatory, one_to_one, readings, counterpart_role_name, counterpart_method_name)
       end
 
     end

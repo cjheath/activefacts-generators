@@ -71,24 +71,24 @@ module ActiveFacts
         end
 
         def value_type_fork(o)
-	  if o.name == "_ImplicitBooleanValueType"
-	    # do nothing
-	  elsif
-	      !o.supertype                      # No supertype, i.e. a base type
-	      o.all_role.size == 0 &&           # No roles
-	      !o.is_independent &&              # not independent
-	      !o.value_constraint &&		# No value constraints
-	      o.concept.all_context_note_as_relevant_concept.size == 0 &&	# No context notes
-	      o.all_instance.size == 0          # No instances
-	    data_type_dump(o)
-	  else
-	    super_type_name = o.supertype ? o.supertype.name : o.name
-	    length = (l = o.length) && l > 0 ? "#{l}" : nil
-	    scale = (s = o.scale) && s > 0 ? "#{s}" : nil
-	    facets = { :length => length, :scale => scale }
-	    value_type_dump(o, super_type_name, facets)
-	  end
-	end
+          if o.name == "_ImplicitBooleanValueType"
+            # do nothing
+          elsif
+              !o.supertype                      # No supertype, i.e. a base type
+              o.all_role.size == 0 &&           # No roles
+              !o.is_independent &&              # not independent
+              !o.value_constraint &&            # No value constraints
+              o.concept.all_context_note_as_relevant_concept.size == 0 &&       # No context notes
+              o.all_instance.size == 0          # No instances
+            data_type_dump(o)
+          else
+            super_type_name = o.supertype ? o.supertype.name : o.name
+            length = (l = o.length) && l > 0 ? "#{l}" : nil
+            scale = (s = o.scale) && s > 0 ? "#{s}" : nil
+            facets = { :length => length, :scale => scale }
+            value_type_dump(o, super_type_name, facets)
+          end
+        end
 
         def value_types_dump
           done_banner = false
@@ -100,7 +100,7 @@ module ActiveFacts
 
               value_type_chain_dump(o)
 #              @object_types_dumped[o] = true
-	      o.ordered_dumped!
+              o.ordered_dumped!
             }
           value_type_end if done_banner
         end
@@ -129,18 +129,18 @@ module ActiveFacts
             count_this_pass = 0
             skipped_this_pass = 0
             sorted.each{|o|
-		next if o.ordered_dumped	    # Already done
+                next if o.ordered_dumped            # Already done
 
-		trace :ordered, "Panicing to dump #{panic.name}" if panic
+                trace :ordered, "Panicing to dump #{panic.name}" if panic
                 # Can we do this yet?
-		remaining_precursors = Array(@precursors[o])-[o]
+                remaining_precursors = Array(@precursors[o])-[o]
                 if (o != panic and                  # We don't *have* to do it (panic mode)
                     remaining_precursors.size > 0)  # precursors - still blocked
-		  trace :ordered, "Can't dump #{o.name} despite panic for #{panic.name}, it still needs #{remaining_precursors.map(&:name)*', '}" if panic
+                  trace :ordered, "Can't dump #{o.name} despite panic for #{panic.name}, it still needs #{remaining_precursors.map(&:name)*', '}" if panic
                   skipped_this_pass += 1
                   next
                 end
-		trace :ordered, "Dumping #{o.name} in panic mode, even though it still needs #{remaining_precursors.map(&:name)*', '}" if panic
+                trace :ordered, "Dumping #{o.name} in panic mode, even though it still needs #{remaining_precursors.map(&:name)*', '}" if panic
 
                 entity_type_banner unless done_banner
                 done_banner = true
@@ -168,24 +168,24 @@ module ActiveFacts
 =begin
                 if panic        # We were already panicing... what to do now?
                   # This won't happen again unless the above code is changed to decide it can't dump "panic".
-		  bad = sorted.select do |o|
-		      o.is_a?(ActiveFacts::Metamodel::EntityType) &&
-		      !o.ordered_dumped &&
-		      (Array(@precursors[o])-[o]).size > 0 &&
-		      (Array(@followers[o])-[o]).size > 0
-		    end
+                  bad = sorted.select do |o|
+                      o.is_a?(ActiveFacts::Metamodel::EntityType) &&
+                      !o.ordered_dumped &&
+                      (Array(@precursors[o])-[o]).size > 0 &&
+                      (Array(@followers[o])-[o]).size > 0
+                    end
 
                   raise "Unresolvable cycle of forward references: " +
                     bad.map { |o| o.name }*', ' +
                     ":\n\t" +
-		    (
-		      bad.map do |o|
-			o.name +
-			  " depends on " +
-			  (@precursors[o].uniq.map{|p| p.name}.sort*', ')
-		      end
-		    ) * "\n\t" +
-		    "\n"
+                    (
+                      bad.map do |o|
+                        o.name +
+                          " depends on " +
+                          (@precursors[o].uniq.map{|p| p.name}.sort*', ')
+                      end
+                    ) * "\n\t" +
+                    "\n"
 =end
 #                else
                   # Find the object that has the most followers and no fwd-ref'd supertypes:
@@ -211,8 +211,8 @@ module ActiveFacts
           # which will be attached to the uniqueness constraint on this object in the binary FT that
           # attaches that identifying role.
           identifying_role_refs =
-	    (o.fact_type && o.fact_type.all_role.size == 1 ? o.fact_type.preferred_reading : pi).
-	      role_sequence.all_role_ref_in_order
+            (o.fact_type && o.fact_type.all_role.size == 1 ? o.fact_type.preferred_reading : pi).
+              role_sequence.all_role_ref_in_order
 
           # We need to get the adjectives for the roles from the identifying fact's preferred readings:
           identifying_facts = ([o.fact_type]+identifying_role_refs.map{|rr| rr.role.fact_type }).compact.uniq
@@ -326,7 +326,7 @@ module ActiveFacts
 
           # REVISIT: There might be constraints we have to merge into the nested entity or subtype. 
           # These will come up as un-handled constraints:
-	  # Dump this fact type only if it contains a presence constraint we've missed:
+          # Dump this fact type only if it contains a presence constraint we've missed:
           pcs = @presence_constraints_by_fact[f]
           pcs && pcs.size > 0 && !pcs.detect{|c| !c.ordered_dumped }
         end
@@ -338,7 +338,7 @@ module ActiveFacts
           return if skip_fact_type(fact_type)
 
           if (et = fact_type.entity_type) &&
-	      fact_type.all_role.size > 1 &&
+              fact_type.all_role.size > 1 &&
               (pi = et.preferred_identifier) &&
               pi.role_sequence.all_role_ref.detect{|rr| rr.role.fact_type != fact_type }
             # trace "Dumping objectified FT #{et.name} as an entity, non-fact PI"
@@ -490,10 +490,10 @@ module ActiveFacts
         def constraints_dump
           heading = false
           @vocabulary.
-	      all_constraint.
-	      reject{|c| c.ordered_dumped}.
-	      sort_by{ |c| constraint_sort_key(c) }.
-	      each do |c|
+              all_constraint.
+              reject{|c| c.ordered_dumped}.
+              sort_by{ |c| constraint_sort_key(c) }.
+              each do |c|
             # Skip some PresenceConstraints:
             if c.is_a?(ActiveFacts::Metamodel::PresenceConstraint)
               # Skip uniqueness constraints that cover all roles of a fact type, they're implicit
@@ -550,7 +550,7 @@ module ActiveFacts
           trace "Should override data_type_dump"
         end
 
-	def value_type_dump(o, super_type_name, facets)
+        def value_type_dump(o, super_type_name, facets)
           trace "Should override value_type_dump"
         end
 

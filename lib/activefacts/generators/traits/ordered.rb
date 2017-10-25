@@ -8,26 +8,26 @@ module ActiveFacts
   module Generators #:nodoc:
     module OrderedTraits
       module DumpedFlag
-	attr_reader :ordered_dumped
+        attr_reader :ordered_dumped
 
-	def ordered_dumped!
-	  @ordered_dumped = true
-	end
+        def ordered_dumped!
+          @ordered_dumped = true
+        end
       end
 
       module ObjectType
-	include DumpedFlag
+        include DumpedFlag
       end
 
       module FactType
-	include DumpedFlag
+        include DumpedFlag
       end
 
       module Constraint
-	include DumpedFlag
+        include DumpedFlag
       end
 
-      include ActiveFacts::TraitInjector	# Must be last in this module, after all submodules have been defined
+      include ActiveFacts::TraitInjector        # Must be last in this module, after all submodules have been defined
     end
   end
 end

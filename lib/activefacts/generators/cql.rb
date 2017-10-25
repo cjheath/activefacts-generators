@@ -18,7 +18,7 @@ module ActiveFacts
     private
       def vocabulary_start
         puts "vocabulary #{@vocabulary.name};\n\n"
-	build_indices
+        build_indices
       end
 
       def vocabulary_end
@@ -29,7 +29,7 @@ module ActiveFacts
       end
 
       def unit_dump unit
-	puts unit.as_cql
+        puts unit.as_cql
       end
 
       def units_end
@@ -45,7 +45,7 @@ module ActiveFacts
       end
 
       def data_type_dump(o)
-	value_type_dump(o, o.name, {}) if o.all_role.size > 0
+        value_type_dump(o, o.name, {}) if o.all_role.size > 0
       end
 
       def value_type_dump(o, super_type_name, facets)
@@ -54,22 +54,22 @@ module ActiveFacts
 
         # REVISIT: A ValueType that is only used as a reference mode need not be emitted here.
 
-	puts o.as_cql
+        puts o.as_cql
       end
 
       def entity_type_dump(o)
-	o.ordered_dumped!
-	pi = o.preferred_identifier
+        o.ordered_dumped!
+        pi = o.preferred_identifier
 
-	supers = o.supertypes
-	if (supers.size > 0)
-	  # Ignore identification by a supertype:
-	  pi = nil if pi && pi.role_sequence.all_role_ref.detect{|rr| rr.role.fact_type.is_a?(ActiveFacts::Metamodel::TypeInheritance) }
-	  subtype_dump(o, supers, pi)
-	else
-	  non_subtype_dump(o, pi)
-	end
-	pi.ordered_dumped! if pi
+        supers = o.supertypes
+        if (supers.size > 0)
+          # Ignore identification by a supertype:
+          pi = nil if pi && pi.role_sequence.all_role_ref.detect{|rr| rr.role.fact_type.is_a?(ActiveFacts::Metamodel::TypeInheritance) }
+          subtype_dump(o, supers, pi)
+        else
+          non_subtype_dump(o, pi)
+        end
+        pi.ordered_dumped! if pi
       end
 
       def append_ring_to_reading(reading, ring)
@@ -193,9 +193,9 @@ module ActiveFacts
         end
         (entity_type.is_independent ? ' independent' : '') +
           " identified by its #{value_residual}#{constraint_text}#{mapping_pragma(entity_type, true)}" +
-	  entity_type.concept.all_context_note_as_relevant_concept.map do |cn|
-	    cn.verbalise
-	  end.join("\n") +
+          entity_type.concept.all_context_note_as_relevant_concept.map do |cn|
+            cn.verbalise
+          end.join("\n") +
           (fact_readings.size > 0 ? " where\n\t" : "") +
           fact_readings*",\n\t"
       end
@@ -230,9 +230,9 @@ module ActiveFacts
         (entity_type.is_independent ? ' independent' : '') +
           " identified by #{ irn*" and " }" +
           mapping_pragma(entity_type, true) +
-	  entity_type.concept.all_context_note_as_relevant_concept.map do |cn|
-	    cn.verbalise
-	  end.join("\n") +
+          entity_type.concept.all_context_note_as_relevant_concept.map do |cn|
+            cn.verbalise
+          end.join("\n") +
           " where\n\t"+identifying_fact_text
       end
 
@@ -294,8 +294,8 @@ module ActiveFacts
           # Alternate identification of objectified fact type?
           primary_supertype = supertypes[0]
           if fact_type.all_role.size > 1 and
-	      pi = fact_type.entity_type.preferred_identifier and
-	      primary_supertype && primary_supertype.preferred_identifier != pi
+              pi = fact_type.entity_type.preferred_identifier and
+              primary_supertype && primary_supertype.preferred_identifier != pi
             puts identified_by(o, pi) + ';'
             return
           end
@@ -369,7 +369,7 @@ module ActiveFacts
         if role_proximity == :proximate
           verbaliser.role_refs_have_subtype_steps(c.role_sequence)
         else
-	  roles = c.role_sequence.all_role_ref.map{|rr|rr.role}
+          roles = c.role_sequence.all_role_ref.map{|rr|rr.role}
           join_over, joined_roles = ActiveFacts::Metamodel.plays_over(roles, role_proximity)
           verbaliser.roles_have_same_player(joined_roles) if join_over
         end
@@ -514,18 +514,18 @@ module ActiveFacts
       end
 
       def constraint_dump(c)
-	case c
-	when ActiveFacts::Metamodel::PresenceConstraint
-	  dump_presence_constraint(c)
-	when ActiveFacts::Metamodel::RingConstraint
-	  dump_ring_constraint(c)
-	when ActiveFacts::Metamodel::SetComparisonConstraint # includes SetExclusionConstraint, SetEqualityConstraint
-	  dump_set_comparison_constraint(c)
-	when ActiveFacts::Metamodel::SubsetConstraint
-	  dump_subset_constraint(c)
-	else
-	  "#{c.class.basename} #{c.name}: unhandled constraint type"
-	end
+        case c
+        when ActiveFacts::Metamodel::PresenceConstraint
+          dump_presence_constraint(c)
+        when ActiveFacts::Metamodel::RingConstraint
+          dump_ring_constraint(c)
+        when ActiveFacts::Metamodel::SetComparisonConstraint # includes SetExclusionConstraint, SetEqualityConstraint
+          dump_set_comparison_constraint(c)
+        when ActiveFacts::Metamodel::SubsetConstraint
+          dump_subset_constraint(c)
+        else
+          "#{c.class.basename} #{c.name}: unhandled constraint type"
+        end
       end
 
       # Find the common supertype of these object_types.
@@ -586,7 +586,7 @@ module ActiveFacts
         end
 
         expanded = verbaliser.expand_reading(reading, frequency_constraints, define_role_names, value_constraints)
-	expanded = "it is not the case that "+expanded if (reading.is_negative)
+        expanded = "it is not the case that "+expanded if (reading.is_negative)
 
         if (ft_rings = @ring_constraints_by_fact[reading.fact_type]) &&
            (ring = ft_rings.detect{|rc| !rc.ordered_dumped})
@@ -608,29 +608,29 @@ module ActiveFacts
           end
         frequency_constraints = [] unless frequency_constraints.detect{|fc| fc[0] != "some" }
 
-	expanded = verbaliser.expand_reading(reading, frequency_constraints)
-	expanded = "it is not the case that "+expanded if (reading.is_negative)
-	expanded
+        expanded = verbaliser.expand_reading(reading, frequency_constraints)
+        expanded = "it is not the case that "+expanded if (reading.is_negative)
+        expanded
       end
 
       def build_indices
-	@presence_constraints_by_fact = Hash.new{ |h, k| h[k] = [] }
-	@ring_constraints_by_fact = Hash.new{ |h, k| h[k] = [] }
+        @presence_constraints_by_fact = Hash.new{ |h, k| h[k] = [] }
+        @ring_constraints_by_fact = Hash.new{ |h, k| h[k] = [] }
 
-	@vocabulary.all_constraint.each { |c|
-	    case c
-	    when ActiveFacts::Metamodel::PresenceConstraint
-	      fact_types = c.role_sequence.all_role_ref.map{|rr| rr.role.fact_type}.uniq  # All fact types spanned by this constraint
-	      if fact_types.size == 1     # There's only one, save it:
-		# trace "Single-fact constraint on #{fact_types[0].concept.guid}: #{c.name}"
-		(@presence_constraints_by_fact[fact_types[0]] ||= []) << c
-	      end
-	    when ActiveFacts::Metamodel::RingConstraint
-	      (@ring_constraints_by_fact[c.role.fact_type] ||= []) << c
-	    else
-	      # trace "Found unhandled constraint #{c.class} #{c.name}"
-	    end
-	  }
+        @vocabulary.all_constraint.each { |c|
+            case c
+            when ActiveFacts::Metamodel::PresenceConstraint
+              fact_types = c.role_sequence.all_role_ref.map{|rr| rr.role.fact_type}.uniq  # All fact types spanned by this constraint
+              if fact_types.size == 1     # There's only one, save it:
+                # trace "Single-fact constraint on #{fact_types[0].concept.guid}: #{c.name}"
+                (@presence_constraints_by_fact[fact_types[0]] ||= []) << c
+              end
+            when ActiveFacts::Metamodel::RingConstraint
+              (@ring_constraints_by_fact[c.role.fact_type] ||= []) << c
+            else
+              # trace "Found unhandled constraint #{c.class} #{c.name}"
+            end
+          }
       end
 
     end
@@ -655,12 +655,12 @@ module ActiveFacts
           }#{
             unit && " "+unit.name
           }#{
-	    transaction_phase && " auto-assigned at "+transaction_phase
+            transaction_phase && " auto-assigned at "+transaction_phase
           }#{
-	    concept.all_context_note_as_relevant_concept.map do |cn|
-	      cn.verbalise
-	    end.join("\n")
-	  }#{
+            concept.all_context_note_as_relevant_concept.map do |cn|
+              cn.verbalise
+            end.join("\n")
+          }#{
             value_constraint && " "+value_constraint.describe
           };"
       end
@@ -675,20 +675,20 @@ module ActiveFacts
 
             if d = coefficient.denominator and d != 1
               "/#{d}"
-	    else
-	      ''
+            else
+              ''
             end +
 
             ' '
           else
             '1 '
           end
-	else
-	  ''
+        else
+          ''
         end +
 
-	all_derivation_as_derived_unit.
-	  sort_by{|d| d.base_unit.name}.
+        all_derivation_as_derived_unit.
+          sort_by{|d| d.base_unit.name}.
           # REVISIT: Sort base units
           # REVISIT: convert negative powers to division?
           map do |der|
@@ -698,15 +698,15 @@ module ActiveFacts
 
         if o = offset and o != 0
           "+ #{o.to_s('F')} "
-	else
-	  ''
+        else
+          ''
         end +
 
         "converts to #{name}#{plural_name ? '/'+plural_name : ''}" +
 
-	(coefficient && !coefficient.is_precise ?  ' approximately' : '') +
+        (coefficient && !coefficient.is_precise ?  ' approximately' : '') +
 
-	(ephemera_url ? " ephemera #{ephemera_url}" : '') +
+        (ephemera_url ? " ephemera #{ephemera_url}" : '') +
 
         ';'
       end

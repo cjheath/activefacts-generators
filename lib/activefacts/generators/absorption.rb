@@ -30,7 +30,7 @@ module ActiveFacts
       end
 
       def generate(out = $>)  #:nodoc:
-	@out = out
+        @out = out
         no_absorption = 0
         single_absorption_vts = 0
         single_absorption_ets = 0

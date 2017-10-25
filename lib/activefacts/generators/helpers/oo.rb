@@ -47,7 +47,7 @@ module ActiveFacts
                 !role.fact_type.is_a?(ActiveFacts::Metamodel::LinkFactType)
             }.
             sort_by{|role|
-	      other_role = role.fact_type.all_role.select{|r2| r2 != role}[0] || role
+              other_role = role.fact_type.all_role.select{|r2| r2 != role}[0] || role
               other_role.preferred_role_name(o) + ':' + role.preferred_role_name(other_role.object_type)
             }.each{|role| 
               role_dump(role)
@@ -59,7 +59,7 @@ module ActiveFacts
           if fact_type.all_role.size == 1
             unary_dump(role, role.preferred_role_name)
             return
-	  end
+          end
           return if role.fact_type.entity_type
 
           if fact_type.all_role.size != 2
@@ -91,8 +91,8 @@ module ActiveFacts
           other_role_method = one_to_one ? role_method : "all_"+role_method
           # puts "---"+role.role_name if role.role_name
           if other_role_name != other_player.oo_default_role_name and
-	      role_method == role.object_type.oo_default_role_name
-	    # debugger
+              role_method == role.object_type.oo_default_role_name
+            # debugger
             other_role_method += "_as_#{other_role_name}"
           end
 
@@ -119,7 +119,7 @@ puts b
               role_name = role.preferred_role_name(fact_type.entity_type)
               one_to_one = role.is_unique
               as = role_name != role.object_type.oo_default_role_name ? "_as_#{role_name}" : ""
-#	      debugger if as != ''
+#             debugger if as != ''
               raise "Fact #{fact_type.describe} type is not objectified" unless fact_type.entity_type
               other_role_method = (one_to_one ? "" : "all_") + 
                 fact_type.entity_type.oo_default_role_name +

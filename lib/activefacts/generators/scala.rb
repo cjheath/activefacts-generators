@@ -21,8 +21,8 @@ module ActiveFacts
     class Scala < Helpers::OO
 
       def initialize(vocabulary, *options)
-	super
-	@constraints_used = {}
+        super
+        @constraints_used = {}
         @fact_types_dumped = {}
       end
 
@@ -35,14 +35,14 @@ module ActiveFacts
           $stderr.puts "Usage:\t\tafgen --scala[=option,option] input_file.cql\n"+
               "\t\tmeta\t\tModify the mapping to suit a metamodel"
           exit 0
-	when /^meta/
-	  @is_metamodel = true
+        when /^meta/
+          @is_metamodel = true
         else super
         end
       end
 
       def fact_type_name(fact_type)
-	fact_type.default_reading.words
+        fact_type.default_reading.words
       end
 
       def vocabulary_start
@@ -52,7 +52,7 @@ module ActiveFacts
       end
 
       def vocabulary_end
-	puts @vocabulary.scala_finale
+        puts @vocabulary.scala_finale
         puts "#{@metamodel}\n}\n"
       end
 
@@ -60,9 +60,9 @@ module ActiveFacts
       end
 
       def value_type_dump(o, super_type_name, facets)
-	puts o.scala_definition(super_type_name, facets)
+        puts o.scala_definition(super_type_name, facets)
 
-	@metamodel << o.scala_metamodel(super_type_name, facets)
+        @metamodel << o.scala_metamodel(super_type_name, facets)
       end
 
       def id_role_names o, id_roles
@@ -85,57 +85,57 @@ module ActiveFacts
       end
 
       def all_identifying_roles(o)
-	pis = []
-	# This places the subtype identifying roles before the supertype's. Reverse the list to change this.
-	id_roles = []
-	o.supertypes_transitive.each do |supertype|
-	  pi = supertype.preferred_identifier
-	  next if pis.include?(pi)   # Seen this identifier already?
-	  pis << pi
+        pis = []
+        # This places the subtype identifying roles before the supertype's. Reverse the list to change this.
+        id_roles = []
+        o.supertypes_transitive.each do |supertype|
+          pi = supertype.preferred_identifier
+          next if pis.include?(pi)   # Seen this identifier already?
+          pis << pi
           identifying_role_refs = pi.role_sequence.all_role_ref_in_order
-	  identifying_role_refs.each do |id_role_ref|
-	    # Have we seen this role in another identifier?
-	    next if id_roles.detect{|idr| idr == id_role_ref.role }
-	    id_roles << id_role_ref.role
-	  end
-	end
-	[id_roles, pis]
+          identifying_role_refs.each do |id_role_ref|
+            # Have we seen this role in another identifier?
+            next if id_roles.detect{|idr| idr == id_role_ref.role }
+            id_roles << id_role_ref.role
+          end
+        end
+        [id_roles, pis]
       end
 
       def entity_object(o, title_name, id_names, id_types)
-	puts o.scala_object(title_name, id_names, id_types)
+        puts o.scala_object(title_name, id_names, id_types)
       end
 
       def entity_trait(o, title_name, primary_supertype, pis)
-	puts o.scala_trait(title_name, primary_supertype, pis)
+        puts o.scala_trait(title_name, primary_supertype, pis)
       end
 
       def entity_model(o, title_name)
-	@metamodel << o.scala_metamodel(title_name)
+        @metamodel << o.scala_metamodel(title_name)
       end
 
       def non_subtype_dump(o, pi)
-	subtype_dump(o, nil, pi)
+        subtype_dump(o, nil, pi)
       end
 
       def subtype_dump(o, supertypes, pi = nil)
-	if supertypes
-	  primary_supertype = o && (o.identifying_supertype || o.supertypes[0])
-	end
-	title_name = o.name.words.titlecase
+        if supertypes
+          primary_supertype = o && (o.identifying_supertype || o.supertypes[0])
+        end
+        title_name = o.name.words.titlecase
 
-	id_roles, pis = *all_identifying_roles(o)
-	id_names = id_role_names(o, id_roles)
-	id_types = id_role_types(id_roles)
-	identification = pi ? identified_by(o, pi) : nil
+        id_roles, pis = *all_identifying_roles(o)
+        id_names = id_role_names(o, id_roles)
+        id_types = id_role_types(id_roles)
+        identification = pi ? identified_by(o, pi) : nil
 
-	# REVISIT: We don't want an object for abstract classes,
-	# i.e. where subtypes have a disjoint mandatory constraint
-	entity_object(o, title_name, id_names, id_types)
+        # REVISIT: We don't want an object for abstract classes,
+        # i.e. where subtypes have a disjoint mandatory constraint
+        entity_object(o, title_name, id_names, id_types)
 
-	entity_trait(o, title_name, primary_supertype, pis)
+        entity_trait(o, title_name, primary_supertype, pis)
 
-	entity_model(o, title_name)
+        entity_model(o, title_name)
 
         @constraints_used[pi] = true if pi
       end
@@ -149,31 +149,31 @@ module ActiveFacts
       end
 
       def skip_fact_type(f)
-	f.is_a?(ActiveFacts::Metamodel::TypeInheritance)
+        f.is_a?(ActiveFacts::Metamodel::TypeInheritance)
       end
 
       # Dump one fact type.
       def fact_type_dump(fact_type, name)
         @fact_types_dumped[fact_type] = true
-	return objectified_fact_type_dump(fact_type.entity_type) if fact_type.entity_type
+        return objectified_fact_type_dump(fact_type.entity_type) if fact_type.entity_type
 
-	puts fact_type.scala_definition
+        puts fact_type.scala_definition
 
-	@metamodel << fact_type.scala_metamodel
+        @metamodel << fact_type.scala_metamodel
       end
 
       def objectified_fact_type_dump o
-	puts o.scala_objectification
-	@metamodel << o.scala_objectification_metamodel
+        puts o.scala_objectification
+        @metamodel << o.scala_objectification_metamodel
       end
 
       def unary_dump(role, role_name)
-	scala_role_name = role_name.words.camelcase
-	puts "    val #{scala_role_name}: Boolean"
+        scala_role_name = role_name.words.camelcase
+        puts "    val #{scala_role_name}: Boolean"
       end
 
       def role_dump(role)
-	puts role.scala_role_definition
+        puts role.scala_role_definition
       end
 
     end

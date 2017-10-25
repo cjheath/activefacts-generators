@@ -8,23 +8,23 @@ module ActiveFacts
   module Generators
     module OOTraits
       module ObjectType
-	# Map the ObjectType name to an OO class name
-	def oo_type_name
-	  name.words.capcase
-	end
+        # Map the ObjectType name to an OO class name
+        def oo_type_name
+          name.words.capcase
+        end
 
-	# Map the OO class name to a default role name
-	def oo_default_role_name
+        # Map the OO class name to a default role name
+        def oo_default_role_name
           name.words.snakecase
-	end
+        end
       end
 
       module Role
-	def oo_role_definition
+        def oo_role_definition
           return if fact_type.entity_type
 
           if fact_type.all_role.size == 1
-	    return "    maybe :#{preferred_role_name}\n"
+            return "    maybe :#{preferred_role_name}\n"
           elsif fact_type.all_role.size != 2
             # Shouldn't come here, except perhaps for an invalid model
             return  # ternaries and higher are always objectified
@@ -55,8 +55,8 @@ module ActiveFacts
           counterpart_role_method = one_to_one ? role_method : "all_"+role_method
           # puts "---"+role.role_name if role.role_name
           if counterpart_role_name != counterpart_type.oo_default_role_name and
-	      role_method == self.object_type.oo_default_role_name
-#	    debugger
+              role_method == self.object_type.oo_default_role_name
+#           debugger
             counterpart_role_method += "_as_#{counterpart_role_name}"
           end
 
@@ -64,10 +64,10 @@ module ActiveFacts
           role_name = nil if role_name == object_type.oo_default_role_name
 
           as_binary(counterpart_role_name, counterpart_type, is_mandatory, one_to_one, nil, role_name, counterpart_role_method)
-	end
+        end
       end
 
-      include ActiveFacts::TraitInjector	# Must be last in this module, after all submodules have been defined
+      include ActiveFacts::TraitInjector        # Must be last in this module, after all submodules have been defined
     end
   end
 end
