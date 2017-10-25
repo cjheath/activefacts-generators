@@ -423,11 +423,11 @@ module ActiveFacts
         def fact_type_key(fact_type)
           role_names =
             if (pr = fact_type.preferred_reading)
-              pr.role_sequence.
-                all_role_ref.
-                sort_by{|role_ref| role_ref.ordinal}.
+              role_refs = pr.role_sequence.all_role_ref.sort_by{|role_ref| role_ref.ordinal}
+              role_refs.
                 map{|role_ref| [ role_ref.leading_adjective, role_ref.role.object_type.name, role_ref.trailing_adjective ].compact*"-" } +
-                [pr.text]
+                [pr.text] +
+                role_refs.map{|role_ref| [role_ref.role.is_mandatory ? 0 : 1] }
             else
               fact_type.all_role.map{|role| role.object_type.name }
             end
