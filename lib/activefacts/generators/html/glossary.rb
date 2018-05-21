@@ -42,12 +42,12 @@ module ActiveFacts
 
         def generate(out = $>)
           @out = out
-          
+
           @all_object_type =
             @vocabulary.
               all_object_type.
               sort_by{|o| o.name.gsub(/ /,'').downcase}
-          
+
           vocabulary_start
 
           if @gen_bootstrap
@@ -64,59 +64,60 @@ module ActiveFacts
           if !@gen_bootstrap
             # puts "<link rel='stylesheet' href='css/orm2.css' media='screen' type='text/css'/>"
             css_file = "/../../../../css/orm2.css"
-          
-                  File.open(File.dirname(__FILE__)+css_file) do |f|
-                    puts "<style media='screen' type='text/css'>"
-                    puts f.read
-                    puts %Q{
-                      .glossary-facttype, .glossary-constraints { display: block; }
-                      .glossary-doc.hide-alternates .glossary-alternates { display: none; }
-                      .glossary-doc.hide-constraints .glossary-constraints { display: none; }
-                      .glossary-doc.hide-examples .glossary-example { display: none; }
-                    }.gsub(/^\s+/, '')
-                    puts "</style>"
-                  end
 
-                  puts %Q{
-                    <style media='print' type='text/css'>
-                    .keyword { color: #0000CC; font-style: italic; display: inline; }
-                    .vocabulary, .object_type { color: #8A0092; font-weight: bold; }
-                    .copula { color: #0E5400; }
-                    .value { color: #FF990E; display: inline; }
-                    .glossary-toc { display: none; }
-                    .glossary-facttype, .glossary-reading { display: inline; }
-                    </style>
-                  }.gsub(/^\s+/, '')
+            File.open(File.dirname(__FILE__)+css_file) do |f|
+              puts "<style media='screen' type='text/css'>"
+              puts f.read
+              puts %Q{
+                .glossary-facttype, .glossary-constraints { display: block; }
+                .glossary-doc.hide-alternates .glossary-alternates { display: none; }
+                .glossary-doc.hide-constraints .glossary-constraints { display: none; }
+                .glossary-doc.hide-examples .glossary-example { display: none; }
+              }.gsub(/^\s+/, '')
+              puts "</style>"
+            end
+
+            puts %Q{
+              <style media='print' type='text/css'>
+              .keyword { color: #0000CC; font-style: italic; display: inline; }
+              .vocabulary, .object_type { color: #8A0092; font-weight: bold; }
+              .copula { color: #0E5400; }
+              .value { color: #FF990E; display: inline; }
+              .glossary-toc { display: none; }
+              .glossary-facttype, .glossary-reading { display: inline; }
+              </style>
+            }.gsub(/^\s+/, '')
+
           end
         end
 
         def vocabulary_end
           if !@gen_bootstrap
-                  puts %Q{
-                  <script type="text/javascript">
-                  function toggle_class(e, c) {
-                    if (!e) return;
-                    var n = e.className;
-                    var i = n.indexOf(c);
-                    if (i == -1) {
-                      e.className = n+' '+c;
-                    } else {
-                      e.className = n.slice(0, i)+n.slice(i+c.length);
-                    }
-                    if (document.location.toString().indexOf('#') >= 0)
-                      document.location = document.location; // Re-scroll to the current fragment
-                  }
-                  function toggle_constraints() {
-                    toggle_class(document.getElementById('glossary-doc'), 'hide-constraints');
-                  }
-                  function toggle_alternates() {
-                    toggle_class(document.getElementById('glossary-doc'), 'hide-alternates');
-                  }
-                  function toggle_examples() {
-                    toggle_class(document.getElementById('glossary-doc'), 'hide-examples');
-                  }
-                  </script>
-                  }.gsub(/^\s+/, '')
+            puts %Q{
+              <script type="text/javascript">
+              function toggle_class(e, c) {
+                if (!e) return;
+                var n = e.className;
+                var i = n.indexOf(c);
+                if (i == -1) {
+                  e.className = n+' '+c;
+                } else {
+                  e.className = n.slice(0, i)+n.slice(i+c.length);
+                }
+                if (document.location.toString().indexOf('#') >= 0)
+                  document.location = document.location; // Re-scroll to the current fragment
+              }
+              function toggle_constraints() {
+                toggle_class(document.getElementById('glossary-doc'), 'hide-constraints');
+              }
+              function toggle_alternates() {
+                toggle_class(document.getElementById('glossary-doc'), 'hide-alternates');
+              }
+              function toggle_examples() {
+                toggle_class(document.getElementById('glossary-doc'), 'hide-examples');
+              }
+              </script>
+            }.gsub(/^\s+/, '')
           end
         end
 
@@ -124,19 +125,19 @@ module ActiveFacts
           if @gen_bootstrap
             puts '<div class="col-md-3 glossary-sidebar">'
           else
-                  puts '<div class="glossary-sidebar">'
+            puts '<div class="glossary-sidebar">'
           end
           puts '<h1 style="visibility: hidden">X</h1>'
           puts '<ol class="glossary-toc">'
           @all_object_type.
-                  reject do |o|
-                    o.name == '_ImplicitBooleanValueType' or
-                    o.kind_of?(ActiveFacts::Metamodel::ValueType) && o.all_role.size == 0 or
-                    o.kind_of?(ActiveFacts::Metamodel::TypeInheritance)
-                  end.
-                    each do |o|
-                      puts "<li>#{termref(o.name)}</li>"
-                    end
+            reject do |o|
+              o.name == '_ImplicitBooleanValueType' or
+              o.kind_of?(ActiveFacts::Metamodel::ValueType) && o.all_role.size == 0 or
+              o.kind_of?(ActiveFacts::Metamodel::TypeInheritance)
+            end.
+            each do |o|
+              puts "<li>#{termref(o.name)}</li>"
+            end
           puts '</ol>'
           puts '<div class="glossary-controls">'
           puts '  <input type="button" onclick="toggle_constraints()" value="Constraints" class="glossary-toggle-constraint">'
@@ -145,7 +146,7 @@ module ActiveFacts
           puts '</div>'
           puts '</div>'
         end
-        
+
         def object_types_dump_def
           if @gen_bootstrap
             puts '<div class="col-md-5 glossary-doc hide-alternates hide-constraints" id="glossary-doc">'
@@ -398,28 +399,29 @@ module ActiveFacts
           puts "  <dt>" +
             "#{termdef(o.name)} " +
             [
-              (supers.size > 0 ? "#{span('is a kind of', 'keyword')} #{supers.map{|s| termref(s.name)}*', '}" : nil),
               (if pi
-                        "#{span('is identified by', 'keyword')} " +
-                        pi.role_sequence.all_role_ref_in_order.map do |rr|
-                          termref(
-                            rr.role.object_type.name,
-                            [ rr.leading_adjective,
-                              rr.role.role_name || rr.role.object_type.name,
-                              rr.trailing_adjective
-                            ].compact*'-'
-                          )
-                        end*", "
-                      else
-                        nil
-                      end)
-            ].compact*', '
-                  "</dt>"
+                "#{span('is identified by', 'keyword')} " +
+                pi.role_sequence.all_role_ref_in_order.map do |rr|
+                  preferred_reading = rr.role.fact_type.preferred_reading
+                  preferred_role_ref = preferred_reading.role_sequence.all_role_ref.detect{|rrp| rrp.role == rr.role}
+                  term(
+                    [ preferred_role_ref.leading_adjective,
+                      termref(rr.role.object_type.name, preferred_role_ref.role.role_name),
+                      preferred_role_ref.trailing_adjective
+                    ].compact*'-'
+                  )
+                end*", "
+              else
+                nil
+              end),
+              (supers.size > 0 ? "#{span('is a kind of', 'keyword')} #{supers.map{|s| termref(s.name)}*', '}" : nil)
+            ].compact*', ' +
+            "\n</dt>\n" +
+            "  <dd>\n"
 
-                puts "  <dd>"
-                relevant_facts_and_constraints(o)
-                  entities(o)
-                puts "  </dd>"
+            relevant_facts_and_constraints(o)
+              entities(o)
+            puts "  </dd>"
         end
 
         def entities(o)
